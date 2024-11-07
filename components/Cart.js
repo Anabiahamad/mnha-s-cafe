@@ -1,11 +1,12 @@
 "use client"
 import Link from 'next/link';
 import React, { useState } from 'react';
-  import { useEffect } from 'react';
-  
+
 useEffect(() => {
-  // Clear cart on page load or set cart to empty
-  localStorage.removeItem('cart');
+  const storedCart = localStorage.getItem('cart');
+  if (storedCart) {
+    setCart(JSON.parse(storedCart));
+  }
 }, []);
 
 export default function Cart() {
