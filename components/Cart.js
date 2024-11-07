@@ -32,16 +32,16 @@ export default function Cart() {
       { name: "Mint Mojito Mocktail", price: 5 },
       { name: "Mango Iced Tea", price: 5 }
     ]);
-  const [cartItems, setCartItems] = useState([]);
   const [isOrderConfirmed, setIsOrderConfirmed] = useState(false);
   const [showCheckout, setShowCheckout] = useState(false);
 
-useEffect(() => {
-  const storedCart = localStorage.getItem('cart');
-  if (storedCart) {
-    setCart(JSON.parse(storedCart));
-  }
-}, []);
+  // Load cart data from localStorage on initial load
+  useEffect(() => {
+    const storedCart = localStorage.getItem('cart');
+    if (storedCart) {
+      setCartItems(JSON.parse(storedCart));
+    }
+  }, []); // Run only on mount
 
 // Save cart data to localStorage whenever it changes
 useEffect(() => {
