@@ -1,6 +1,7 @@
 "use client"
 import Link from 'next/link';
 import React, { useState } from 'react';
+  import { useEffect } from 'react';
 
 export default function Cart() {
 
@@ -32,6 +33,11 @@ export default function Cart() {
     ]);
   const [isOrderConfirmed, setIsOrderConfirmed] = useState(false);
   const [showCheckout, setShowCheckout] = useState(false);
+
+useEffect(() => {
+  // Clear cart on page load or set cart to empty
+  localStorage.removeItem('cart');
+}, []);
 
    // Function to remove an item
    const removeItem = (itemToRemove) => {
