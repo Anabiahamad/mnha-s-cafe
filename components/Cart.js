@@ -32,6 +32,7 @@ export default function Cart() {
       { name: "Mint Mojito Mocktail", price: 5 },
       { name: "Mango Iced Tea", price: 5 }
     ]);
+  const [cartItems, setCartItems] = useState([]);
   const [isOrderConfirmed, setIsOrderConfirmed] = useState(false);
   const [showCheckout, setShowCheckout] = useState(false);
 
