@@ -1,13 +1,8 @@
 "use client"
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
 
-useEffect(() => {
-  const storedCart = localStorage.getItem('cart');
-  if (storedCart) {
-    setCart(JSON.parse(storedCart));
-  }
-}, []);
+
 
 export default function Cart() {
 
@@ -39,6 +34,22 @@ export default function Cart() {
     ]);
   const [isOrderConfirmed, setIsOrderConfirmed] = useState(false);
   const [showCheckout, setShowCheckout] = useState(false);
+
+useEffect(() => {
+  const storedCart = localStorage.getItem('cart');
+  if (storedCart) {
+    setCart(JSON.parse(storedCart));
+  }
+}, []);
+
+// Save cart data to localStorage whenever it changes
+useEffect(() => {
+  if (cartItems.length > 0) {
+    localStorage.setItem('cart', JSON.stringify(cartItems));
+  } else {
+    localStorage.removeItem('cart');
+  }
+}, [cartItems]);
 
 
    // Function to remove an item
