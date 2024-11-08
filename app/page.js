@@ -8,7 +8,19 @@ import { useState, useEffect } from 'react';
 import React from 'react'
 
 function page() {
+
+  const [cartItems, setCartItems] = useState(() => {
+    const savedCart = localStorage.getItem('cart');
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+
   const [showButton, setShowButton] = useState(false);
+  const [showCart, setShowCart] = useState(false);
+
+  //save cartItems to localStorage whenever it changes
+  useEffect(() => {
+  localStorage.setItem('cart', JSON.stringify(cartItems));
+  }, [cartItems]);
 
   // Handle scroll event
   useEffect(() => {
@@ -34,11 +46,13 @@ function page() {
     });
   };
 
-  const [cartItems, setCartItems] = useState([]);
-  const [showCart, setShowCart] = useState(false);
 
   const addToCart = (item) => {
-    setCartItems([...cartItems, item]);
+    setCartItems(prevItems => {
+      const updatedCart = [...prevItems, item];
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
+      return updatedCart;
+    });
   };
   return (
     <>

@@ -7,8 +7,12 @@ import React, {useEffect, useState } from 'react';
 export default function Cart() {
 
     // Initialize cartItems in local state
-    const [cartItems, setCartItems] = useState([
-      { name: "Tomato Basil Soup", price: 12 },
+    const [cartItems, setCartItems] = useState(() => {
+      //initialize cart from localStorage if available
+      const storedCart = localStorage.getItem('cart');
+      return storedCart ? JSON.parse(storedCart) : [];
+    });
+    /*  { name: "Tomato Basil Soup", price: 12 },
       { name: "Chicken Corn Soup", price: 15 },
       { name: "Chicken Noodle Soup", price: 15 },
       { name: "Caeser Salad", price: 7 },
@@ -30,51 +34,40 @@ export default function Cart() {
       { name: "Berry Blast Lemonade", price: 5 },
       { name: "Hibiscus Iced tea", price: 5 },
       { name: "Mint Mojito Mocktail", price: 5 },
-      { name: "Mango Iced Tea", price: 5 }
-    ]);
+      { name: "Mango Iced Tea", price: 5 } */
+
   const [isOrderConfirmed, setIsOrderConfirmed] = useState(false);
   const [showCheckout, setShowCheckout] = useState(false);
 
-  // Load cart data from localStorage on initial load
+  // update localStoagre whenever cartItems changes
   useEffect(() => {
-    const storedCart = localStorage.getItem('cart');
-    if (storedCart) {
-      setCartItems(JSON.parse(storedCart));
-    }
-  }, []); // Run only on mount
-
-// Save cart data to localStorage whenever it changes
-useEffect(() => {
-  if (cartItems.length > 0) {
     localStorage.setItem('cart', JSON.stringify(cartItems));
-  } else {
-    localStorage.removeItem('cart');
-  }
-}, [cartItems]);
+  }, [cartItems]);
 
-
-   // Function to remove an item
+  // Function to remove an item
    const removeItem = (itemToRemove) => {
     setCartItems(cartItems.filter(item => item !== itemToRemove));
   };
 
+ // Function to clear the cart
+ const clearCart = () => {
+  setCartItems([]);
+  localStorage.removeItem('cart'); // Clear all items in the cart
+};
+
   // Calculate the total price
   const totalAmount = cartItems.reduce((sum, item) => sum + item.price, 0);
 
-  const handleCheckout = () => {
-    setShowCheckout(true); // Show the checkout form
-  };
+  const handleCheckout = () =>  setShowCheckout(true); // Show the checkout form ;
 
   const handleOrderConfirm = (e) => {
     e.preventDefault();
     setIsOrderConfirmed(true); // Show confirmation message
-    setShowCheckout(false); // Hide the checkout form
+    setShowCheckout(false); 
+    clearCart();// Hide the checkout form
   };
 
- // Function to clear the cart
- const clearCart = () => {
-  setCartItems([]); // Clear all items in the cart
-};
+
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
@@ -99,9 +92,7 @@ useEffect(() => {
         <p>Your cart is empty.</p>
       )}
 
-{showCheckout && (
-        <CheckoutForm onSubmit={handleOrderConfirm} onClose={() => setShowCheckout(false)} />
-      )}
+{showCheckout && <CheckoutForm onSubmit={handleOrderConfirm} onClose={() => setShowCheckout(false)} />}
 
       {isOrderConfirmed && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
