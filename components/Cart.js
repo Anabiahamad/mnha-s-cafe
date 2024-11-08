@@ -8,9 +8,12 @@ export default function Cart() {
 
     // Initialize cartItems in local state
     const [cartItems, setCartItems] = useState(() => {
-      //initialize cart from localStorage if available
+      if (typeof window !== 'undefined') {      
+  //initialize cart from localStorage if available
       const storedCart = localStorage.getItem('cart');
       return storedCart ? JSON.parse(storedCart) : [];
+      }
+      return [];
     });
     /*  { name: "Tomato Basil Soup", price: 12 },
       { name: "Chicken Corn Soup", price: 15 },
@@ -41,7 +44,9 @@ export default function Cart() {
 
   // update localStoagre whenever cartItems changes
   useEffect(() => {
+    if (typeof window !== 'undefined') {
     localStorage.setItem('cart', JSON.stringify(cartItems));
+    }
   }, [cartItems]);
 
   // Function to remove an item
@@ -52,7 +57,9 @@ export default function Cart() {
  // Function to clear the cart
  const clearCart = () => {
   setCartItems([]);
+  if (typeof window !== 'undefined') {
   localStorage.removeItem('cart'); // Clear all items in the cart
+  }
 };
 
   // Calculate the total price

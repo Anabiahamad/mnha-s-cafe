@@ -10,8 +10,11 @@ import React from 'react'
 function page() {
 
   const [cartItems, setCartItems] = useState(() => {
+    if (typeof window !== 'undefined') {
     const savedCart = localStorage.getItem('cart');
     return savedCart ? JSON.parse(savedCart) : [];
+    }
+    return [];
   });
 
   const [showButton, setShowButton] = useState(false);
@@ -19,7 +22,9 @@ function page() {
 
   //save cartItems to localStorage whenever it changes
   useEffect(() => {
+    if (typeof window !== 'undefined') {
   localStorage.setItem('cart', JSON.stringify(cartItems));
+    }
   }, [cartItems]);
 
   // Handle scroll event
@@ -50,8 +55,10 @@ function page() {
   const addToCart = (item) => {
     setCartItems(prevItems => {
       const updatedCart = [...prevItems, item];
+      if (typeof window !== 'undefined') {
       localStorage.setItem('cart', JSON.stringify(updatedCart));
       return updatedCart;
+      }
     });
   };
   return (
